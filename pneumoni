@@ -1,0 +1,84 @@
+virusPCR <- rp. ekspektorat til PCR for influenza, Parainfluenza, RSV og adenovirus.
+atypiskePCR <- rp. ekspektorat til PCR for Legionella, Mycoplasma, Chlamydia psittaci og Chlamydia pneumoniae
+
+rp. indlæggelsesblodprøver + P-karbamid, P-laktat, P-LDH
+rp. dyrkning af blod, ekspektorat og urin
+rp. rtg thorax
+rp. benzylpenicillin iv 2 MIE x 4 #Allergi: Roxithromycin, Cefuroxim 750 mg x 4 eller Meropenem 1 g x 3
+if(klinisk svær pneumoni OR CURB-65 > 2) {
+  rp. ciprofloxacin iv 400 mg x 2 #Allergi: Azithromycin eller clarithromycin
+  atypiskePCR
+  rp. A-gas
+  kontakt til intensiv
+}
+
+if(immunsupprimeret) {
+  if(KMT) rp. blod og bronkialvæske til PCR for CMV
+  virusPCR
+  rp. ekspektorat til PCR Pneumocystis jiroveci
+  rp. ekspektorat med svampeidentifikation
+  consider{
+    aspergillus
+    actinomyces
+    nocardia
+    bordetella
+    EBV
+    CMV
+  }
+}
+
+if(IV misbrug) AB: Cefuroxim iv 750 mg x 4
+if(international erhvervelse) {
+  AB: Ceftriaxon iv 2g x 1
+  atypiskePCR
+  rp. ekspektorat eller halspodning til PCR for influenza
+}
+
+if(influenzasæson) {
+  rp. ekspektorat til PCR for influenza
+  consider: rp. oseltamivir po 75 mg x 2 i 5 dage
+}
+
+if(hospitalserhvervet) {
+  AB: piperacillin/tazobactam iv 2g/0,25g x 4 #Cefuroxim 750 mg x 4 -- Meropenem 1 g x 3
+  if(VAP) {
+    if(intuberetTid < 96 timer) {
+      AB: Cefuroxim iv 750 mg x 4
+    } else {
+      AB: Meropenem iv 1g x 3
+      evt. AB+: Ciprofloxacin iv 400 mg x 2
+    }
+}
+
+if(aspiration) {
+  AB: Piperacillin/tazobactam 2/0,25g x 4 
+  AB+: Metronidazol 500 mg x 3
+}
+  
+consider{
+  virusPCR
+  rp. oseltamivir 75 mg x 2 i 5 dage.
+}
+
+at(48 timer) {
+  if(manglende fremgang) {
+    rp. rtg thorax obs empyem, eksudat
+    atypiskePCR
+    consider: 
+      rp. ekspektorat til mikroskopi for syrefaste stave på KMA
+      rp. ekspektorat til dyrkning og PCR for mycobakterier på SSI
+
+at(udskrivelse) {
+  Forsøge rygeophør
+  if(Alder > 50) rp. rtg thorax om 7 uger. #Særligt mænd, rygere.
+  if(Alder > 65) Sikre influenza og pneumokok vaccination
+  consider: 
+    immundefekt:
+      IgM, IgG, IgA
+      ANA, ANCA, RF
+      HIV, HBV, HCV serologi
+      CMV, EBV serologi
+      
+}
+
+#Alle medicinordinationer bør være funktioner der tager argumenter om nyre-, leverfunktion og vægt
