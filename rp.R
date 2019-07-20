@@ -149,14 +149,6 @@ fully_define_pneumonia <- function(x) {
   fully_defined_disease <- as_tibble(c(x, defaults[missing_args])) #structure(c(x, defaults[missing_args]), class = "disease")
 }
 
-translate_disease_shorthand("CAP")
-translate_disease_shorthand("Atypical pneumonia")
-class(translate_disease_shorthand("CAP"))
-translate_disease_shorthand("CAP") %>% left_join(treatments_var3)
-translate_disease_shorthand("CAP") %>% fully_define_pneumonia()
-translate_disease_shorthand("Aspiration pneumonia") %>% fully_define_pneumonia() %>% left_join(treatments_var3)
-translate_disease_shorthand("HAP") %>% fully_define_pneumonia() %>% left_join(treatments_var3)
-
 treatments <- tribble(
   ~disease, ~qualifier, ~severity, ~drug,
   "Pneumonia", "default", "mild", "PeniG"#,
@@ -228,8 +220,11 @@ expect_equal(filter(treatments_var3, setting == "Community", severity == "Mild",
 
 treat <- function(disease_shorthand) {
   is.string(disease_shorthand)
-  
-  structure(list(disease = disease_shorthand), class = "treatment")
+  x <- translate_disease_shorthand(disease_shorthand)
+  x <- fully_define_pneumonia(x)
+  x <- left_join(x, treatments_var3, by = c("disease", "setting", "severity", 
+                                       "atypical_suspicion", "cave_penicillin"))
+  structure(x, class = "treatment")
 }
 expect_equal(treat("CAP")$disease, "CAP")
 expect_s3_class(treat("CAP"), "treatment")
@@ -244,7 +239,7 @@ expect_s3_class(exposure("Aircondition"), "disease_qualifier")
 score <- function(x) {
   expect(is.count(x) | are_equal(x, 0), "Score should be a single whole number 0 or larger")
   structure(list(score = x #, score_type = "something"
-                 ), class = "disease_qualifier")
+  ), class = "disease_qualifier")
 }
 
 "+.treatment" <- function(treatment, disease_qualifier) {
@@ -268,10 +263,10 @@ treatment_aliases %>%
 
 specified_disease <- #structure(
   list(
-  disease = "Pneumonia",
-  qualifiers = c("Community acquired", "Aircondition", "Cave penicillin"),
-  severity = "mild")#,
-  #class = "disease"
+    disease = "Pneumonia",
+    qualifiers = c("Community acquired", "Aircondition", "Cave penicillin"),
+    severity = "mild")#,
+#class = "disease"
 )
 
 expand.grid(disease = "Pneumonia", 
