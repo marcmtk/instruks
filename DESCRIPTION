@@ -1,0 +1,17 @@
+Package: prescribr
+Title: Streamlining correct prescriptions, with a focus on antibiotics.
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Marc",
+           family = "Trunjer Kusk Nielsen",
+           role = c("aut", "cre"),
+           email = "marc.mtk@gmail.com")
+Description: Streamlining correct prescriptions, with a focus on antibiotics.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Suggests: 
+    testthat
+Imports: 
+    assertthat
+RoxygenNote: 6.1.1
